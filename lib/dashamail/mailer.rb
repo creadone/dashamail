@@ -8,8 +8,11 @@ module DashaMail
 
     def send
       message = @composer.call
-      pp message
       Request.new.send(message)
+    end
+
+    def check(transaction_id)
+      Request.new.check(transaction_id)
     end
 
     def method_missing(method, *args)

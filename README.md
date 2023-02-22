@@ -24,11 +24,11 @@ DashaMail.configure do |config|
   config.domain     = 'my-domain.ru'
   config.from_email = 'marketing@my-domain.ru'
   config.from_name  = 'Отдел маркетинга'
-  config.http_debug = true
+  # config.http_debug = true
 end
 ```
 
-Отправляется письмо следующим образом:
+Отправить письмо:
 ```ruby
 mailer         = DashaMail::Mailer.new
 mailer.to      = 'marketing@customer.ru'
@@ -41,16 +41,34 @@ mailer.add_inline     './inline_attachment.png', 123
 response = mailer.send
 
 if response.success?
-  pp response.body #=> {"msg"=>{"err_code"=>0, "text"=>"OK", "type"=>"message"}, "data"=> {"transaction_id"=> "5a802b10ba82eccfd164f3c8be0fb678,99ed93fac03fa05db6f33ade40e2ff39"}}
-  pp response.transaction_id #=> 5a802b10ba82eccfd164f3c8be0fb678,99ed93fac03fa05db6f33ade40e2ff39
+  pp response.body
+# {"msg"=>
+#   {"err_code"=>0,
+#    "text"=>"OK",
+#    "type"=>"message"},
+#  "data"=>
+#  {"transaction_id"=>"5a802b10ba82eccfd164f3c8be0fb678"}}
+
+  pp response.transaction_id #=> 5a802b10ba82eccfd164f3c8be0fb678
 end
 ```
 
-## Development
+Проверить статус отправки письма:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+mailer = DashaMail::Mailer.new
+response = mailer.check('5a802b10ba82eccfd164f3c8be0fb678')
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+pp response.data
+# {"data"=>
+#   {"date"=>"2023-02-22 19:14:42",
+#    "datesent"=>"2023-02-22 19:14:42",
+#    "to"=>"marketing@customer.ru",
+#    "status"=>5,
+#    "statusname"=>"Sent",
+#    "statuschangedate"=>"2023-02-22 19:14:42"},
+#  "success"=>true}
+```
 
 ## Contributing
 
