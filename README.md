@@ -23,22 +23,27 @@ DashaMail.configure do |config|
   config.api_key    = 'ваш API-ключ'
   config.domain     = 'my-domain.ru'
   config.from_email = 'marketing@my-domain.ru'
-  # config.http_debug = true
+  config.from_name  = 'Отдел маркетинга'
+  config.http_debug = true
 end
 ```
 
 Отправляется письмо следующим образом:
-
 ```ruby
 mailer         = DashaMail::Mailer.new
 mailer.to      = 'marketing@customer.ru'
 mailer.subject = 'Какой-то заголовок'
-mailer.message = '<p>Какой-то текст</p>'
+mailer.message = '<p>Какой-то текст</p><img src="cid:123">'
 
 mailer.add_attachment './attachment.png'
-mailer.add_inline     './inline_attachment.png', 'cid'
+mailer.add_inline     './inline_attachment.png', 123
 
-mailer.send
+response = mailer.send
+
+if response.success?
+  pp response.body #=> {"msg"=>{"err_code"=>0, "text"=>"OK", "type"=>"message"}, "data"=> {"transaction_id"=> "5a802b10ba82eccfd164f3c8be0fb678,99ed93fac03fa05db6f33ade40e2ff39"}}
+  pp response.transaction_id #=> 5a802b10ba82eccfd164f3c8be0fb678,99ed93fac03fa05db6f33ade40e2ff39
+end
 ```
 
 ## Development
@@ -49,7 +54,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dashamail.
+Bug reports and pull requests are welcome on GitHub at https://github.com/creadone/dashamail.
 
 ## License
 

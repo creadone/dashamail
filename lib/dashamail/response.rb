@@ -4,18 +4,23 @@ module DashaMail
   class Response
     def initialize(answer)
       @answer = answer
+      @body   = JSON.parse(@answer.body)['response']
     end
 
     def success?
-      @answer.code.to_i == 200
+      @body.dig('msg', 'err_code').to_i == 0
     end
 
-    def code
+    def http_code
       @answer.code
     end
 
+    def transaction_id
+      @body.dig('data', 'transaction_id')
+    end
+
     def body
-      @answer.body
+      @body
     end
 
     def raw

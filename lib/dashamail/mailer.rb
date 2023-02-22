@@ -8,6 +8,7 @@ module DashaMail
 
     def send
       message = @composer.call
+      pp message
       Request.new.send(message)
     end
 

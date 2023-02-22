@@ -26,6 +26,14 @@ module DashaMail
       @from_email = from_email
     end
 
+    def self.from_name
+      @from_name
+    end
+
+    def self.from_name=(from_name)
+      @from_name = from_name
+    end
+
     def self.no_track_opens
       @no_track_opens
     end

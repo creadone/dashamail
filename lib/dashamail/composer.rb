@@ -6,6 +6,7 @@ module DashaMail
       @config = DashaMail.config
       @container = {
         to: nil,
+        from_name: @config.from_name,
         from_email: @config.from_email,
         ignore_delivery_policy: @config.ignore_delivery_policy,
         no_track_clicks: @config.no_track_clicks,
@@ -21,8 +22,8 @@ module DashaMail
       @container[:cc] = cc
     end
 
-    def bcc=(_bcc)
-      @container[:bcc] = cc
+    def bcc=(bcc)
+      @container[:bcc] = bcc
     end
 
     def from_email=(from_email)
